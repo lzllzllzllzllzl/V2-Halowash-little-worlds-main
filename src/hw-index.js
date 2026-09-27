@@ -10,6 +10,7 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import dracoWasm from "./draco-data/draco_decoder.wasm.js";
 import dracoWrapper from "./draco-data/draco_wasm_wrapper.js";
+import { createBackdrop } from "./hw-backdrop.js";
 
 const START_THETA = 45;      /* camera azimuth the fronts are composed against */
 const AUTO_SPIN = 0.45;
@@ -77,6 +78,7 @@ async function start(config) {
   renderer.toneMappingExposure = 1.12;
 
   const scene = new THREE.Scene();
+  const backdrop = createBackdrop(scene);
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   scene.environmentIntensity = 0.5;
@@ -93,22 +95,13 @@ async function start(config) {
   controls.autoRotate = true;
   controls.autoRotateSpeed = AUTO_SPIN;
 
-  scene.add(new THREE.HemisphereLight(0xcfe4f2, 0x2a3550, .55));
-  const key = new THREE.DirectionalLight(0xfff1dd, 2.4);
+  scene.add(new THREE.HemisphereLight(0xe8ebef, 0x6f747a, .65));
+  const key = new THREE.DirectionalLight(0xffffff, 2.2);
   key.castShadow = true;
   key.shadow.mapSize.set(4096, 4096);
   scene.add(key, key.target);
-  const rim = new THREE.DirectionalLight(0x9fd8e8, 1.1);
+  const rim = new THREE.DirectionalLight(0xdde3ea, 1.0);
   scene.add(rim);
-
-  const catcher = new THREE.Mesh(
-    new THREE.PlaneGeometry(240, 240),
-    new THREE.ShadowMaterial({ opacity: .28 })
-  );
-  catcher.rotation.x = -Math.PI / 2;
-  catcher.position.y = -.02;
-  catcher.receiveShadow = true;
-  scene.add(catcher);
 
   /* load the four GLB dioramas (Draco-compressed) */
   const draco = new DRACOLoader();
@@ -147,14 +140,25 @@ async function start(config) {
     const foot = w.footprint || 9.8;
     const s = foot / Math.max(size.x, size.z);
     const wrap = new THREE.Group();
+    const unit = new THREE.Group();
     model.scale.setScalar(s);
-    model.position.set(-center.x * s, -box3.min.y * s, -center.z * s);  /* centered, base on y=0 */
-    wrap.add(model);
+    model.position.set(-center.x * s, -box3.min.y * s + .02, -center.z * s);  /* centered, base on pad top */
+    unit.add(model);
+    /* mid-gray concrete pad so each diorama sits on the street ground */
+    const pad = new THREE.Mesh(
+      new THREE.BoxGeometry(foot + .5, .18, foot + .5),
+      new THREE.MeshStandardMaterial({ color: 0xa9aeb3, roughness: .9 })
+    );
+    pad.position.y = -.07;
+    pad.receiveShadow = true;
+    unit.add(pad);
+    wrap.add(unit);
     const sign = makeSign(w.name);
-    sign.group.position.y = size.y * s + 1.15;
+    const baseSignY = size.y * s + 1.15;
+    sign.group.position.y = baseSignY;
     wrap.add(sign.group);
     scene.add(wrap);
-    return { wrap, model, sign, spec: w, index: i, phase: i * 1.3 };
+    return { wrap, unit, model, sign, baseSignY, unitScale: 1, spec: w, index: i, phase: i * 1.3 };
   });
 
   /* rotate each diorama to face the start azimuth (plus a per-scene nudge
@@ -170,10 +174,16 @@ async function start(config) {
     const p = camera.aspect < 0.9;
     const changed = p !== portrait;
     portrait = p;
-    const gap = p ? 10.2 : 12.6;
+    const gap = p ? 13 : 15.6;
+    const us = p ? .8 : 1;
     for (const it of items) {
       const [cx, cz] = CELLS[it.index];
       it.wrap.position.set(cx * gap / 2, 0, cz * gap / 2);
+      if (it.unitScale !== us) {
+        it.unitScale = us;
+        it.unit.scale.setScalar(us);
+        it.sign.group.position.y = it.baseSignY * us;
+      }
     }
     scene.updateMatrixWorld(true);
     const gridBox = new THREE.Box3();
@@ -288,19 +298,21 @@ async function start(config) {
     }
   });
 
-  /* animation loop: gentle diorama bob + billboard signs */
+  /* animation loop: gentle sign bob + billboard (dioramas stay grounded) */
   const clock = new THREE.Clock();
   renderer.setAnimationLoop(() => {
     const t = clock.getElapsedTime();
     if (!paused) {
       for (const it of items) {
-        it.wrap.position.y = Math.sin(t * .6 + it.phase) * .05;
         it.sign.board.position.y = Math.sin(t * 1.25 + it.phase) * .07;
         it.sign.gem.position.y = .78 + Math.sin(t * 1.25 + it.phase) * .08;
         it.sign.gem.rotation.y = t * .8;
       }
     }
     for (const it of items) it.sign.board.quaternion.copy(camera.quaternion);
+    const cd = camera.position.distanceTo(controls.target);
+    backdrop.setDistance(cd, camera.position);
+    backdrop.update(t);
     controls.update();
     renderer.render(scene, camera);
   });

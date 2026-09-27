@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#122039">
+<meta name="theme-color" content="#d3d7db">
 <meta name="description" content="HaloWash 四场景小世界：居家护理、病房护理、养老院护理与头皮沙龙四座微缩建筑，可旋转查看，点击进入实况场景。">
 <title>HaloWash 四场景小世界</title><script>window.addEventListener("error",function(e){document.title="ERR:"+e.message+" @line"+(e.lineno||"?");});window.addEventListener("unhandledrejection",function(e){var r=e.reason||{};document.title="REJ:"+r.message+" @ "+String(r.stack||"").split("\n")[1];});</script>
 <link rel="icon" href="data:,">
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#122039;overscroll-behavior:none}body{font-family:system-ui,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#d3d7db;overscroll-behavior:none}body{font-family:system-ui,sans-serif}
 #world{display:block;width:100%;height:100%;outline:none;touch-action:none;cursor:grab;opacity:0;transition:opacity .6s ease}
-#world.ready{opacity:1}#world.dragging{cursor:grabbing}#world:focus-visible{outline:1px solid #b8d9df66;outline-offset:-5px}
-.vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 42%,transparent 36%,#030a1980 100%)}
-#loading{position:fixed;left:50%;top:50%;width:22px;height:22px;margin:-11px;border:1px solid #9fc8d030;border-top-color:#c3dce0aa;border-radius:50%;animation:turn 1s linear infinite}
-#fallback{position:absolute;inset:0;place-content:center;text-align:center;padding:30px;color:#d0e0eb;background:#122039;font-size:16px;line-height:1.8}
+#world.ready{opacity:1}#world.dragging{cursor:grabbing}#world:focus-visible{outline:1px solid #00000040;outline-offset:-5px}
+.vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 42%,transparent 55%,#00000014 100%)}
+#loading{position:fixed;left:50%;top:50%;width:22px;height:22px;margin:-11px;border:1px solid #00000022;border-top-color:#00000099;border-radius:50%;animation:turn 1s linear infinite}
+#fallback{position:absolute;inset:0;place-content:center;text-align:center;padding:30px;color:#3a4046;background:#d3d7db;font-size:16px;line-height:1.8}
 #fallback:not([hidden]){display:grid}
 #fallback p{max-width:380px;margin:auto}
 #enter-chip{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;padding:9px 16px;border:1px solid #2ea8a0;border-radius:999px;background:#173145f2;color:#d9f3ef;font:600 13px/1 system-ui,sans-serif;cursor:pointer}
@@ -36,8 +36,8 @@
 </div>
 <button id="enter-chip" type="button" hidden></button>
 <p id="instructions" class="sr-only">四座 HaloWash 护理场景建筑位于页面中央：居家护理、病房护理、养老院护理与头皮沙龙。拖拽旋转视角，滚轮或双指缩放，点击一座建筑进入对应场景页；方向键旋转视角，加号减号缩放，空格暂停动画，Esc 复位视角。</p>
-<noscript><div style="position:absolute;inset:40% 15%;color:#d0e0eb;text-align:center">请启用 JavaScript 浏览四场景小世界。</div></noscript>
-<script src="./index-bundle.js?v=13"></script>
+<noscript><div style="position:absolute;inset:40% 15%;color:#3a4046;text-align:center">请启用 JavaScript 浏览四场景小世界。</div></noscript>
+<script src="./index-bundle.js?v=14"></script>
 <script>
 window.HWIndex.start({ worlds: [
   { key: "home",   name: "居家护理",   href: "scene-home.html",   footprint: 9.8,  yaw: 0 },
