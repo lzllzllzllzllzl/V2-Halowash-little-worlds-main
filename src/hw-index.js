@@ -161,8 +161,9 @@ async function start(config) {
     return { wrap, unit, model, sign, baseSignY, unitScale: 1, spec: w, index: i, phase: i * 1.3 };
   });
 
-  /* rotate each diorama to face the start azimuth (plus a per-scene nudge
-   * in degrees for variety) */
+  /* rotate each diorama so its front faces the start azimuth; per-world
+   * yaw values were calibrated against the GLB models' front orientations
+   * (contact-sheet render at the same camera azimuth/elevation) */
   for (const it of items)
     it.model.rotation.y = THREE.MathUtils.degToRad(START_THETA - 180 + (it.spec.yaw || 0));
 
