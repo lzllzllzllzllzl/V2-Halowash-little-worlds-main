@@ -14,7 +14,7 @@ const pages = [
     title: "居家护理 · HaloWash 小世界",
     sign: "居家护理 · HaloWash",
     aria: "HaloWash 居家护理小世界：家中客厅里的光环护理舱，可拖拽旋转查看",
-    desc: "家中客厅里，长辈安坐在单人椅上，光环护理舱缓缓罩下 —— 不出门，也能完成一次温和的头皮洗护。",
+    desc: "家中客厅里，长辈半躺在单人护理椅上，光环护理舱缓缓罩下 —— 不出门，也能完成一次温和的头皮洗护。",
     model: "models/home.glb",
     azimuth: 45
   },
@@ -33,8 +33,8 @@ const pages = [
     out: "scene-garden.html",
     title: "养老院护理 · HaloWash 小世界",
     sign: "养老院护理 · HaloWash",
-    aria: "HaloWash 养老院护理小世界：公共客厅里的 SCALP360 照护站，可拖拽旋转查看",
-    desc: "养老院的公共客厅里，SCALP360 照护站在沙发、电视与轮椅之间，护理员陪伴长辈完成日常洗护。",
+    aria: "HaloWash 养老院护理小世界：公共客厅里的两台 SCALP360 照护椅，可拖拽旋转查看",
+    desc: "养老院的公共客厅里，两台 SCALP360 照护椅与轮椅相邻，长辈们伴着绿植与置物架，悠闲完成日常洗护。",
     model: "models/garden.glb",
     azimuth: 45
   },
@@ -43,7 +43,7 @@ const pages = [
     title: "头皮沙龙 · HaloWash 小世界",
     sign: "头皮沙龙 · SCALP360",
     aria: "HaloWash 头皮沙龙小世界：SCALP360 SALON 镜墙下的两台光环护理舱，可拖拽旋转查看",
-    desc: "SCALP360 SALON：镜墙与聚光灯下，两台光环舱同时开工，头皮护理变成一种享受。",
+    desc: "SCALP360 SALON：镜墙与聚光灯下，三台光环舱同时开工，头皮护理变成一种享受。",
     model: "models/salon.glb"
   }
 ];
