@@ -1,4 +1,5 @@
 node_modules/
 Halowash-little-worlds-main/
+.zcode/
 .DS_Store
 Thumbs.db
