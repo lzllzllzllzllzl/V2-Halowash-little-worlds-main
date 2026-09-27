@@ -4,7 +4,9 @@
   "description": "HaloWash 四场景小世界 — static three.js site; rebuild bundles with node tools/build-bundle.mjs",
   "type": "module",
   "devDependencies": {
-    "esbuild": "^0.28.2"
+    "@gltf-transform/cli": "^4.5.0",
+    "esbuild": "^0.28.2",
+    "meshoptimizer": "^1.3.0"
   },
   "dependencies": {
     "three": "0.185.0"

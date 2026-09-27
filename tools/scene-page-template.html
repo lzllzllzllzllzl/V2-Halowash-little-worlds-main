@@ -48,7 +48,7 @@ body{font-family:system-ui,sans-serif}
     <button id="pause" class="chip chip-btn" type="button" aria-pressed="false">⏸ 暂停</button>
   </div>
 </footer>
-<script src="./scene-bundle.js"></script>
-<script>window.HWScene.start({ model: "data:model/gltf-binary;base64,@@MODEL@@", azimuth: @@AZIMUTH@@ });</script>
+<script src="./scene-bundle.js?v=@@BUNDLE_V@@"></script>
+<script>window.HWScene.start({ model: "data:model/gltf-binary;base64,@@MODEL@@", azimuth: @@AZIMUTH@@, focus: @@FOCUS@@, span: @@SPAN@@ });</script>
 </body>
 </html>

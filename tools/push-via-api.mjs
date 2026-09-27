@@ -6,7 +6,9 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
-const REPO = "lzllzllzllzllzl/Halowash-little-worlds";
+const REPO = (process.argv[2] ??
+  execFileSync("git", ["remote", "get-url", "origin"]).toString().trim()
+    .replace(/^https:\/\/github\.com\//, "").replace(/\.git$/, ""));
 const gh = (args, input) =>
   execFileSync("gh", ["api", ...args], { input, maxBuffer: 1 << 28, timeout: 180000 }).toString();
 

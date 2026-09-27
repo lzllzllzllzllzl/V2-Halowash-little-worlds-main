@@ -1,11 +1,12 @@
 /* Rebuilds the four HaloWash scene pages from the template + models/*.glb.
  * Each page embeds its GLB as a base64 data URI so it works from file://. */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const template = readFileSync(join(root, "tools/scene-page-template.html"), "utf8");
+const bundleV = Math.floor(statSync(join(root, "scene-bundle.js")).mtimeMs);
 
 const pages = [
   {
@@ -15,7 +16,7 @@ const pages = [
     aria: "HaloWash 居家护理小世界：家中客厅里的光环护理舱，可拖拽旋转查看",
     desc: "家中客厅里，长辈安坐在单人椅上，光环护理舱缓缓罩下 —— 不出门，也能完成一次温和的头皮洗护。",
     model: "models/home.glb",
-    azimuth: -41
+    azimuth: 45
   },
   {
     out: "scene-ward.html",
@@ -24,7 +25,9 @@ const pages = [
     aria: "HaloWash 病房护理小世界：病床上方的便携光环护理舱，可拖拽旋转查看",
     desc: "病房里，便携光环舱移到病床上方，无需搬运患者，卧床也能完成一次清洁护理。",
     model: "models/ward.glb",
-    azimuth: 41
+    azimuth: 45,
+    focus: [0.9, 0.7],
+    span: 5.8
   },
   {
     out: "scene-garden.html",
@@ -32,7 +35,8 @@ const pages = [
     sign: "养老院护理 · HaloWash",
     aria: "HaloWash 养老院护理小世界：公共客厅里的 SCALP360 照护站，可拖拽旋转查看",
     desc: "养老院的公共客厅里，SCALP360 照护站在沙发、电视与轮椅之间，护理员陪伴长辈完成日常洗护。",
-    model: "models/garden.glb"
+    model: "models/garden.glb",
+    azimuth: 45
   },
   {
     out: "scene-salon.html",
@@ -52,6 +56,9 @@ for (const p of pages) {
     .replaceAll("@@ARIA@@", p.aria)
     .replaceAll("@@DESC@@", p.desc)
     .replaceAll("@@AZIMUTH@@", String(p.azimuth ?? 38))
+    .replaceAll("@@FOCUS@@", JSON.stringify(p.focus ?? null))
+    .replaceAll("@@SPAN@@", String(p.span ?? null))
+    .replaceAll("@@BUNDLE_V@@", String(bundleV))
     .replaceAll("@@MODEL@@", b64);
   writeFileSync(join(root, p.out), html);
   console.log(p.out, (html.length / 1024 / 1024).toFixed(2) + " MB");

@@ -102,7 +102,11 @@ async function start(config) {
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
-    const dist = Math.max(size.x, size.z) * 1.5 + size.y * 0.7;
+    /* optional per-scene focus: frame a sub-region (e.g. a room on an
+     * oversized floor slab) instead of the whole bounding box */
+    if (config.focus) { center.x = config.focus[0]; center.z = config.focus[1]; }
+    const span = config.span ?? Math.max(size.x, size.z);
+    const dist = span * 1.5 + size.y * 0.7;
     const sph = new THREE.Spherical(dist, THREE.MathUtils.degToRad(58), THREE.MathUtils.degToRad(config.azimuth ?? 38));
     camera.position.copy(center).add(new THREE.Vector3().setFromSpherical(sph));
     controls.target.copy(center);
