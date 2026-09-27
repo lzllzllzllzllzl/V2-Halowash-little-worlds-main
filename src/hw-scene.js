@@ -174,6 +174,11 @@ async function start(config) {
   canvas.classList.add("ready");
   document.getElementById("loading")?.remove();
 
+  /* ?dbg: expose the live graph for one-off visual debugging */
+  if (new URLSearchParams(location.search).has("dbg")) {
+    window.__hwdbg = { scene, camera, controls, THREE };
+  }
+
   canvas.addEventListener("webglcontextlost", e => {
     e.preventDefault();
     fallback.hidden = false;
